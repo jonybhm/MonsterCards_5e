@@ -1,0 +1,36 @@
+{
+  "personas": [
+    {
+      "id": 0.6800390778013768,
+      "nombre": "Strahd ",
+      "tipo": "Vampiro",
+      "alias": "Alucard",
+      "alineamiento": "LB",
+      "xp": "9099"
+    },
+    {
+      "id": 0.4102910467571078,
+      "nombre": "Van Hellsing",
+      "tipo": "Hombre Lobo",
+      "alias": "Logan",
+      "alineamiento": "LB",
+      "xp": "1366"
+    },
+    {
+      "id": 0.5191291131145822,
+      "nombre": "Van ",
+      "tipo": "Vampiro",
+      "alias": "Logan",
+      "alineamiento": "LB",
+      "xp": "1366"
+    },
+    {
+      "id": 0.01694943067844068,
+      "nombre": "Van Hellsing",
+      "tipo": "Vampiro",
+      "alias": "Logan",
+      "alineamiento": "LB",
+      "xp": "4215"
+    }
+  ]
+}
