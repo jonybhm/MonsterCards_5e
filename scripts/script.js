@@ -114,7 +114,6 @@ function calcularPromedio(monstruosGuardados)
     
     console.log(promedioXP);
     return promedioXP;
-
 }
 
 async function renderizarTablaConMonstruos()

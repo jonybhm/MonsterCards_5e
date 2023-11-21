@@ -41,7 +41,7 @@ export async function getMonstruos()
 
         console.error(error.message);
     }
-
+    
     finally
     {
             document.getElementById("spinner").style.display = "none";
