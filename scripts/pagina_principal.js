@@ -36,6 +36,7 @@ export async function editarMonstruo(id,monstruosGuardados)
     
 }
 
+
 export async function borrarMonstruo(id,monstruosGuardados)
 {
     let monstruoABorrar = monstruosGuardados.find 

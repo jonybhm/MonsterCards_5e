@@ -1,52 +1,72 @@
 const URL = "http://localhost:3000/personas";
 
+
 export function postMonstruo(new_Monstruo)
 {
+       
+    const xhr = new XMLHttpRequest();
+    
     document.getElementById("spinner").style.display = "flex";
-    axios.post(URL,new_Monstruo)
-    .then
-    (
-        ({data})=>
-        {
-            console.log(data);
-        }
-    )
-    .catch
-    (
-        ({message})=>
-        {console.error(message)
-        }
-    )
-    .finally
-    (
-        ()=>
+ 
+
+    xhr.onreadystatechange = ()=>
+    {
+        if(xhr.readyState == 4)
         {
             document.getElementById("spinner").style.display = "none";
+
+            if(xhr.status >= 200 && xhr.status < 300)
+            {
+                const data = JSON.parse(xhr.responseText);
+                console.log(data);
+            }
+            else{
+                console.error(`ERROR ${xhr.status}: ${xhr.statusText}`);
+            }
         }
-    )
+    }    
+    
+    xhr.open("POST", URL, true);
+    
+
+    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+
+    try
+    {
+        xhr.send(JSON.stringify(new_Monstruo));
+    }
+    catch(error)
+    {
+        console.log(error);
+    }
 }
+
 
 export async function getMonstruos()
 {
-    document.getElementById("spinner").style.display = "flex";
-    try
-    {
-        const respuesta = await axios.get(URL);
-        //console.log(respuesta.data);
-        return respuesta.data;
-    
-    }
-    catch (error)
-    {
 
-        console.error(error.message);
+    document.getElementById("spinner").style.display = "flex";
+
+    try 
+    {
+        const res = await fetch(URL);
+        if(!res.ok)
+        {
+            throw new Error(`Error ${res.status}: ${res.statusText}`);;
+        }
+        const data = await res.json();
+        console.log(data);
+        return data;
     }
-    
+    catch(res)
+    {        
+        console.error(`Error ${res.status}: ${res.statusText}`);
+    }
     finally
     {
-            document.getElementById("spinner").style.display = "none";
+        document.getElementById("spinner").style.display = "none";
     }
-    
+
 }
 
 export async function delMonstruo(id)
@@ -66,33 +86,62 @@ export async function delMonstruo(id)
     }
 }
 
-export async function updMonstruo(updated_Monstruo)
+
+ export async function updMonstruo(updated_Monstruo)
+ {
+     document.getElementById("spinner").style.display = "flex";
+     try
+     {
+         const response = await axios.put(URL + "/" + updated_Monstruo.id, updated_Monstruo)
+         console.log(response.data)
+     }
+     catch(error)
+     {
+         console.error(error.message)
+     }
+     finally
+     {
+         document.getElementById("spinner").style.display = "none";
+     }
+
+ }
+
+
+
+export function getPersona(id)
 {
-    document.getElementById("spinner").style.display = "flex";
+    const xhr = new XMLHttpRequest();
+
+     document.getElementById("spinner").style.display = "flex";
+
+    xhr.onreadystatechange = ()=>
+    {
+        if(xhr.readyState == 4)
+        {
+            document.getElementById("spinner").style.display = "none";
+            
+            if(xhr.status >= 200 && xhr.status < 300)
+            {
+                const data = JSON.parse(xhr.responseText);
+                console.log(data);
+            }
+            else
+            {
+                console.error(`ERROR ${xhr.status}: ${xhr.statusText}`);
+            }
+            
+        }
+    }
+    
+    xhr.open("GET", URL + `/${id}`, true);
+
     try
     {
-        const response = await axios.put(URL + "/" + updated_Monstruo.id, updated_Monstruo)
-        console.log(response.data)
+        xhr.send();
     }
     catch(error)
     {
-        console.error(error.message)
+        console.log(error);
     }
-    finally
-    {
-        document.getElementById("spinner").style.display = "none";
-    }
-
 }
-
-// export function getMonstruo(id)
-// {
-//     document.getElementById("spinner").style.display = "flex";
-//     axios.get(URL + "/" + id)
-//     .then(({data})=>{console.log(data);})
-//     .catch(({message})=>{console.error(message)})
-//     .finally(()=>{    document.getElementById("spinner").style.display = "none";
-// })
-// }
-
 

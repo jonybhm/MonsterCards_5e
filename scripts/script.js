@@ -116,6 +116,7 @@ function calcularPromedio(monstruosGuardados)
     return promedioXP;
 }
 
+
 async function renderizarTablaConMonstruos()
 {
     let monstruosGuardados = await axiosModulo.getMonstruos();
@@ -128,7 +129,7 @@ async function renderizarTablaConMonstruos()
         tablaMonstruos.deleteRow(1);
     }
 
-    if(criterio != "Cualquiera")
+    if(criterio != "Todos")
     {        
         monstruosGuardados = monstruosGuardados.filter 
         (
@@ -141,10 +142,20 @@ async function renderizarTablaConMonstruos()
 
     if(monstruosGuardados !== null)
     {
+
         const promedioExperiencia = calcularPromedio(monstruosGuardados);
         document.querySelector("#promedioExperiencia").value = promedioExperiencia;
 
         const columnasSeleccionadas = obtenerColumnasSeleccionadas();
+
+        monstruosGuardados.sort
+        (
+            function(a,b)
+            {
+                return b.xp - a.xp
+            }
+        )
+
 
         monstruosGuardados.forEach
         (

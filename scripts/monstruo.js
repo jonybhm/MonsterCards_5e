@@ -1,4 +1,4 @@
-const tiposDeMonstruos = ['Aberración', 'Bestia', 'Celestial', 'Dragón', 'Elemental', 'Fey', 'Fiend', 'Gigante', 'Humanoide', 'Monstruosidad', 'Ooze', 'Planta', 'No Muerto'];
+const tiposDeMonstruos = ['Vampiro', 'Hombre Lobo', 'Fantasma', 'Esqueleto', 'Bruja', 'Zombie'];
 
 localStorage.setItem('tiposDeMonstruos', JSON.stringify(tiposDeMonstruos));
 
