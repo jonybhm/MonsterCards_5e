@@ -80,6 +80,43 @@ function crearBoton(nombreIcono,fila,numeroCelda,funcionBoton,idMonstruo,listaMo
     );
 }
 
+function obtenerColumnasSeleccionadas()
+{
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+    return Array.from(checkboxes).map
+    (
+        function(checkbox)
+        {
+            return checkbox.dataset.column;
+        }
+    );
+}
+
+function calcularPromedio(monstruosGuardados)
+{
+    const valoresXP = monstruosGuardados.map
+    (
+        function(monstruo)
+        {
+            return monstruo.xp;
+        }
+    )
+    
+    const sumaXP = valoresXP.reduce
+    (
+        function(anterior,actual)
+        {
+            return parseInt(anterior) + parseInt(actual);
+        }
+    )
+    
+    const promedioXP = parseInt(sumaXP)/parseInt(valoresXP.length);
+    
+    console.log(promedioXP);
+    return promedioXP;
+
+}
+
 async function renderizarTablaConMonstruos()
 {
     let monstruosGuardados = await axiosModulo.getMonstruos();
@@ -94,7 +131,6 @@ async function renderizarTablaConMonstruos()
 
     if(criterio != "Cualquiera")
     {        
-        console.log('Antes del filtro:', monstruosGuardados);
         monstruosGuardados = monstruosGuardados.filter 
         (
             function(monstruo)
@@ -102,11 +138,13 @@ async function renderizarTablaConMonstruos()
                 return monstruo.tipo == criterio;
             }
         )
-        console.log('Despues del filtro:', monstruosGuardados);
     }
 
     if(monstruosGuardados !== null)
     {
+        const promedioExperiencia = calcularPromedio(monstruosGuardados);
+        document.querySelector("#promedioExperiencia").value = promedioExperiencia;
+
         const columnasSeleccionadas = obtenerColumnasSeleccionadas();
 
         monstruosGuardados.forEach
@@ -124,11 +162,14 @@ async function renderizarTablaConMonstruos()
                     }
                 );
 
-                crearBoton("editar",fila,5,principalModulo.editarMonstruo,monstruo.id,monstruosGuardados)
+                crearBoton("editar",fila,columnasSeleccionadas.lenght,principalModulo.editarMonstruo,monstruo.id,monstruosGuardados)
                 
-                crearBoton("borrar",fila,6,principalModulo.borrarMonstruo,monstruo.id,monstruosGuardados)
+                crearBoton("borrar",fila,columnasSeleccionadas.lenght,principalModulo.borrarMonstruo,monstruo.id,monstruosGuardados)
             }
         );       
+
+        
+           
     }
     else
     {
@@ -136,17 +177,7 @@ async function renderizarTablaConMonstruos()
     }    
 }
 
-function obtenerColumnasSeleccionadas()
-{
-    const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
-    return Array.from(checkboxes).map
-    (
-        function(checkbox)
-        {
-            return checkbox.dataset.column;
-        }
-    );
-}
+
 
 const seleccionTipo = document.getElementById('filtrarTipo');
 crearOpcionesSelect(seleccionTipo);
