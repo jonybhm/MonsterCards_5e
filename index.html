@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="De Castro Jonathan">
+    <script type="module" defer src="./scripts/monstruo.js"></script>
+    <script type="module" defer src="./scripts/script.js"></script>
+ 
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+    <script type="module" defer src="./js/axios.js"></script>
+
+    <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./css/styles.css">
+
+
+    <title>parcial 2</title>
+
+</head>
+
+<body>
+    
+    <div id="spinner">
+        <img src="https://64.media.tumblr.com/442f97dc0a91a3265c029624e6f22aea/c74ab70b1b7acfeb-5f/s500x750/282a6d5f4d21f38f30155af43d0bab55b16dd6d4.gifv" alt="spinner-gif" >
+    </div>
+
+        
+        
+    <header id="principal">
+        <div class="logo">
+            <img src="./assets/icono.ico" alt="Logo">
+        </div>
+        <nav>
+            <ul>
+                <li><a href="pagina_principal.html"><img src="./assets/Home.png" alt="Home">Home</a></li>
+                <li><a href="#"><img src="./assets/Monstruos.png" alt="Monstruos">Monstruos</a></li>
+                <li><a href="#"><img src="./assets/Blog.png" alt="Blog">Blog</a></li>
+                <li><a href="#"><img src="./assets/Contactos.png" alt="Contactos">Contactos</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div id="contenido">
+        <h1 id="top">Bestiario 5e</h1>
+    </div>
+
+    <div class="container">
+
+        <form>
+            <h2>INFORMACIÓN MONSTRUO</h2>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="nombre"><img src="./assets/nombre.png" alt="nombre">NOMBRE</label>
+                        <input type="text" id="nombre" name="nombre" class="form-control" required placeholder="Ingrese el nombre...">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="alias"><img src="./assets/alias.png" alt="alias">ALIAS</label>
+                        <input type="text" id="alias" name="alias"  
+                        class="form-control" required placeholder="Ingrese el alias...">
+                    </div>
+                </div>
+            </div>
+    
+            <div class="form-group" >
+
+                <label for="alineamiento"><img src="./assets/alineamiento.png" alt="">ALINEAMIENTO</label>
+                
+                <div class="radio-options">
+        
+                    <div>
+                        <label for="legalbueno">LEGAL BUENO</label>
+                        <input type="radio" id="alineamiento" name="alineamiento" value="LB">
+        
+                        <label for="neutralbueno">NEUTRAL BUENO</label>
+                        <input type="radio" id="alineamiento" name="alineamiento" value="NB">
+        
+                        <label for="caoticobueno">CAÓTICO BUENO</label>
+                        <input type="radio" id="alineamiento" name="alineamiento" value="CB">
+                 
+                    </div>
+                    <div>
+                        <label for="legalneutral">LEGAL NEUTRAL</label>
+                        <input type="radio" id="alineamiento" name="alineamiento" value="LN">
+        
+                        <label for="neutralpuro">NEUTRAL PURO</label>
+                        <input type="radio" id="alineamiento" name="alineamiento" value="NP">
+        
+                        <label for="caoticoneutral">CAÓTICO NEUTRAL</label>
+                        <input type="radio" id="alineamiento" name="alineamiento" value="CN">
+        
+                    </div>
+                    <div>
+                        <label for="legalmalvado">LEGAL MALVADO</label>
+                        <input type="radio" id="alineamiento" name="alineamiento" value="LM">
+        
+                        <label for="neutralmalvado">NEUTRAL MALVADO</label>
+                        <input type="radio" id="alineamiento" name="alineamiento" value="NM">
+        
+                        <label for="caoticomalvado">CAÓTICO MALVADO</label>
+                        <input type="radio" id="alineamiento" name="alineamiento" value="CM">
+            
+                    </div>
+                </div>
+            </div>
+    
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="xp"><img src="./assets/experiencia.png" alt="experiencia">PUNTOS EXPERIENCIA</label>
+                        <input type="range" class="custom-range bg-primary" id="xp" name="xp" min="0" max="10000">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="tipo"><img src="./assets/tipo.png" alt="tipo">TIPO</label>
+                        <select class="form-control" id="tipo" name="tipo"></select>
+                    </div>                  
+                </div>
+            </div>
+
+    
+            <!-- <button type="submit" class="guardar"> <img src="./assets/guardar.png" alt="GUARDAR" >GUARDAR </button> -->
+            <button type="submit" class="btn btn-primary" id="btnPostMonstruo"><img src="./assets/guardar.png" alt="GUARDAR" >Guardar</button>
+    
+        </form>
+    </div>
+    
+    <br>
+
+<div class="container-fuid">
+    <div class="row">
+        <div class="d-flex justify-content-center">
+            <div class="col-md-2">
+                <label for="tipo" class="bg-danger">Filtrar por tipo:</label>
+            </div>
+            <div class="col-md-5">
+                <select name="filtrarTipo" id="filtrarTipo" onchange="filtrarTabla()" class="form-control">
+                    <option value="Cualquiera">Cualquiera</option>
+                </select>          
+            </div>
+            
+        </div>
+    </div>
+    <div class="row">
+        <div class="d-flex justify-content-center">
+            <div class="col-md-2">
+                <label for="tipo" class="bg-danger">Mostrar:</label>
+            </div>
+            <div class="col-md-1">
+                <label>
+                    <input type="checkbox" data-column="nombre" class="checkbox-columna" > Nombre
+                </label>
+            </div>
+            <div class="col-md-1">
+                <label>
+                    <input type="checkbox" data-column="tipo" class="checkbox-columna" > Tipo
+                </label>
+            </div>
+            <div class="col-md-1">
+                <label>
+                    <input type="checkbox" data-column="alias" class="checkbox-columna" > Alias
+                </label>
+            </div>
+            <div class="col-md-1">
+                <label>
+                    <input type="checkbox" data-column="alineamiento" class="checkbox-columna" > Alineamiento
+                </label>
+            </div>
+            <div class="col-md-1">
+                <label> 
+                    <input type="checkbox" data-column="xp" class="checkbox-columna" > Experiencia
+                </label>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="table-responsive">
+
+    <table id="tablaMonstruos" class="table table-striped table-hover table-sm custom-table">
+        <thead>
+            <tr>
+                <th>NOMBRE</th>
+                <th>TIPO</th>
+                <th>ALIAS</th>
+                <th>ALINEAMIENTO</th>
+                <th >PUNTOS EXPERIENCIA</th>
+                <th colspan="2"></th>
+            </tr>
+        </thead>
+        <tbody> 
+            <tr>    
+    
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+
+<footer>    
+    <nav>
+        <ul>
+            <li><a href="#"><img src="./assets/Home.png" alt="Home">Home</a></li>
+            <li><a href="#"><img src="./assets/Monstruos.png" alt="Monstruos">Monstruos</a></li>
+            <li><a href="#"><img src="./assets/Blog.png" alt="Blog">Blog</a></li>
+            <li><a href="#"><img src="./assets/Contactos.png" alt="Contactos">Contactos</a></li>
+        </ul>
+    </nav>
+
+    <div>
+        <p>Laboratorio III - Todos los derechos reservados 2023 ©</p>
+    </div>
+</footer>
+</body>
+</html>
