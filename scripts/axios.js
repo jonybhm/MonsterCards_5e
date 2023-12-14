@@ -1,4 +1,4 @@
-const URL = "http://localhost:3000/personas";
+const URL = "http://localhost:3000/monstruos";
 
 
 export function postMonstruo(new_Monstruo)
@@ -20,7 +20,8 @@ export function postMonstruo(new_Monstruo)
                 const data = JSON.parse(xhr.responseText);
                 console.log(data);
             }
-            else{
+            else
+            {
                 console.error(`ERROR ${xhr.status}: ${xhr.statusText}`);
             }
         }

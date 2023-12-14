@@ -1,0 +1,19 @@
+{
+	"folders": [
+		{
+			"path": "D:/xampp/htdocs/clase01"
+		},
+		{
+			"path": "../../.."
+		},
+		{
+			"path": "D:/xampp/htdocs/slim4"
+		},
+		{
+			"path": "D:/xampp/htdocs/strip_1"
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "clase_1"
+	}
+}

@@ -1,39 +1,34 @@
 import * as axiosModulo from './axios.js';
 
 
-function crearElemento(tag,contenido)
+function crearElemento(tag,contenido,icono = {})
 {
     const elemento = document.createElement(tag);
     elemento.textContent = contenido;
+
+    if (icono.imagenSrc) 
+    {
+        const imagen = document.createElement('img');
+        imagen.src = icono.imagenSrc;
+        elemento.appendChild(imagen);
+    }
+
     return elemento;
 }
 
-export async function editarMonstruo(id,monstruosGuardados)
+export function limpiarForm()
 {
-    let monstruoAEditar = monstruosGuardados.find 
+    document.getElementById("spinner").style.display = "flex";
+    setTimeout
     (
-        function(monstruo)
-        {
-        return monstruo.id == id;
-        } 
+        function()
+        {            
+            document.getElementById('nombre').value = '';
+            document.getElementById('tipo').value = '';
+            document.getElementById('alias').value = '';
+            document.getElementById("spinner").style.display = "none";
+        }, "1000"
     );
-
-    monstruoAEditar.nombre = prompt ('Ingrese Nombre Nuevo:', monstruoAEditar.nombre);
-    monstruoAEditar.tipo = prompt ('Ingrese Tipo Nuevo:', monstruoAEditar.tipo);
-    monstruoAEditar.alias = prompt ('Ingrese Alias Nuevo:', monstruoAEditar.alias);
-    monstruoAEditar.alineamiento = prompt ('Ingrese Alineamiento Nuevo:', monstruoAEditar.alineamiento);
-    monstruoAEditar.xp = prompt ('Ingrese Experiencia Nueva:', monstruoAEditar.xp);
-
-    try
-    {
-        await axiosModulo.updMonstruo(monstruoAEditar);
-    }
-    catch(error)
-    {
-        console.error(error.message);
-
-    }
-    
 }
 
 
@@ -50,25 +45,15 @@ export async function borrarMonstruo(id,monstruosGuardados)
     try
     {
         await axiosModulo.delMonstruo(monstruoABorrar.id);
+        limpiarForm();
+
     }
     catch(error)
     {
-        console.error(error.message);
-    }
-}
+        console.error("Debe seleccionar un mosntruo para eliminar",error.message);
+        alert("Debe seleccionar una fila antes de eliminar!!");
 
-function limpiarTarjetas(contenedorTarjetas)
-{    
-    const botonLimpiar = document.getElementById('boton-limpiar');
-    
-    botonLimpiar.addEventListener
-    (
-        'click',function()
-        {
-            localStorage.removeItem('monstruos');
-            contenedorTarjetas.innerHTML ='';
-        }
-    );
+    }
 }
 
 
@@ -89,67 +74,29 @@ async function renderizarTarjeta()
             {
                 const tarjeta = document.createElement('form');
 
-                tarjeta.appendChild(crearElemento('p', "Nombre"));
+                tarjeta.appendChild(crearElemento('p', "Nombre", {imagenSrc:'./assets/nombre.png'}));
                 const nombre = crearElemento('label', monstruo.nombre);
                 tarjeta.appendChild(nombre);
 
-                tarjeta.appendChild(crearElemento('p', "Tipo"));
+                tarjeta.appendChild(crearElemento('p', "Tipo", {imagenSrc:'./assets/tipo.png'}));
                 const tipo = crearElemento('label', monstruo.tipo);
                 tarjeta.appendChild(tipo);
 
-                tarjeta.appendChild(crearElemento('p', "Alias"));
+                tarjeta.appendChild(crearElemento('p', "Alias", {imagenSrc:'./assets/alias.png'}));
                 const alias = crearElemento('label', monstruo.alias);
                 tarjeta.appendChild(alias);
 
-                tarjeta.appendChild(crearElemento('p', "Alineamiento"));
+                tarjeta.appendChild(crearElemento('p', "Alineamiento", {imagenSrc:'./assets/alineamiento.png'}));
                 const alineamiento = crearElemento('label', monstruo.alineamiento);
                 tarjeta.appendChild(alineamiento);
 
-                tarjeta.appendChild(crearElemento('p', "Experiencia"));
+                tarjeta.appendChild(crearElemento('p', "Experiencia", {imagenSrc:'./assets/experiencia.png'}));
                 const xp = crearElemento('label', monstruo.xp);
                 tarjeta.appendChild(xp);
 
-                const botonEditar = crearElemento('button', 'Editar');
-                tarjeta.appendChild(botonEditar);
-
-                const botonBorrar = crearElemento('button', 'Borrar');
-                tarjeta.appendChild(botonBorrar);
-    
-                botonEditar.addEventListener
-                (
-                    'click',async function(event)
-                    {
-                        event.preventDefault();
-                        try
-                        {
-                            await editarMonstruo(monstruo.id,monstruosGuardados);
-                        }
-                        catch(error)
-                        {
-                            console.error(error.message);
-                        }
-                    }
-                );
-                
-                botonBorrar.addEventListener
-                (
-                    'click',async function(event)
-                    {
-                        event.preventDefault();
-                        try
-                        {
-                            await borrarMonstruo(monstruo.id,monstruosGuardados);
-                        }
-                        catch(error)
-                        {
-                            console.error(error.message);
-                        }
-                    }
-                );
-    
+                    
                 contenedorTarjetas.append(tarjeta);
 
-                limpiarTarjetas(contenedorTarjetas);
             }
         );
     }

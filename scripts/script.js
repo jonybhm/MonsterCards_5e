@@ -33,63 +33,142 @@ formulario.addEventListener
         try
         {
             event.preventDefault();
-            const id = Math.random();
+            const id = Math.floor(Math.random()*1000000);
             const nombre = formulario.querySelector('#nombre').value;
             const alias = formulario.querySelector('#alias').value;
-            const alineamiento = formulario.querySelector('#alineamiento').value;
+            
+            let alineamiento;
+
+            const opcionesRadio = document.querySelectorAll('input[name="alineamiento"]');
+
+            opcionesRadio.forEach
+            (
+                function(radio)
+                {
+                    if(radio.checked)
+                    {
+                        alineamiento = radio.value;
+                    }
+                }
+            )
+            
             const tipo = formulario.querySelector('#tipo').value;
             const xp = formulario.querySelector('#xp').value;
             
-            const nuevoMonstruo = new monstruoModulo.Monstruo (id,nombre,tipo,alias,alineamiento,xp);
-            
-            await axiosModulo.postMonstruo(nuevoMonstruo)        
-        
-           
+            const idMonstruo = idMonstruoEnviado;
+            console.log("ID Monstruo:",idMonstruo);
 
+            if(idMonstruo != null)
+            {
+                const updatedMonstruo = new monstruoModulo.Monstruo (idMonstruo,nombre,tipo,alias,alineamiento,xp);
+
+                await axiosModulo.updMonstruo(updatedMonstruo)     
+                idMonstruoEnviado = null;
+
+            }
+            else
+            {
+                const nuevoMonstruo = new monstruoModulo.Monstruo (id,nombre,tipo,alias,alineamiento,xp);
+                console.log("Antes postMonstruo");
+                await axiosModulo.postMonstruo(nuevoMonstruo)
+                console.log("Despues postMonstruo");    
+                monstruosGuardados = await axiosModulo.getMonstruos();
+
+
+            }
+            principalModulo.limpiarForm();
+            await renderizarTablaConMonstruos(columnasSeleccionadas);
+
+            
+                  
         }
         catch(error)
         {
             console.error(error.message)
         }
+        
+
     }    
 );
 
-function crearBoton(nombreIcono,fila,numeroCelda,funcionBoton,idMonstruo,listaMonstruosGuardados)
-{
-    const imagen = document.createElement('img');
-    imagen.src = `./assets/${nombreIcono}.png`;
-    imagen.style.width = "30px";
-    const boton = document.createElement('button');
-    boton.appendChild(imagen);
-    fila.insertCell(numeroCelda).appendChild(boton);
+const botonEliminar = document.getElementById('btnDelMonstruo');
     
-    boton.addEventListener
-    (
-        'click',async function(event)
+botonEliminar.addEventListener
+(
+    'click',async function(event)
+    {
+        event.preventDefault();
+        try
         {
-            event.preventDefault();
-            try
-            {
-                await funcionBoton(idMonstruo,listaMonstruosGuardados);
-            }
-            catch(error)
-            {
-                console.error(error.message);
-            }
-        }
-    );
-}
 
-function obtenerColumnasSeleccionadas()
-{
-    const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
-    return Array.from(checkboxes).map
-    (
-        function(checkbox)
-        {
-            return checkbox.dataset.column;
+            await principalModulo.borrarMonstruo(idMonstruoEnviado,monstruosGuardados);
+            renderizarTablaConMonstruos(columnasSeleccionadas);
+            principalModulo.limpiarForm();
         }
-    );
+        catch(error)
+        {
+            console.error(error.message);
+
+        }
+    }
+);
+
+
+let checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+
+let columnasSeleccionadas =  Array.from(checkboxes).map
+(
+    function(checkbox)
+    {
+        return checkbox.dataset.column;
+    }
+);
+
+checkboxes.forEach
+(
+    function (checkbox) 
+    {
+        checkbox.addEventListener
+        (
+            'change', function () 
+            {
+                checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+                columnasSeleccionadas =  Array.from(checkboxes).map
+                (
+                    function(checkbox)
+                    {
+                        return checkbox.dataset.column;
+                    }
+                );
+                
+                actualizarCabecera(columnasSeleccionadas);
+                renderizarTablaConMonstruos(columnasSeleccionadas);
+            }
+        );            
+    }
+);
+    
+
+
+
+function actualizarCabecera(columnasSeleccionadas)
+{
+    const tablaMonstruos = document.getElementById('tablaMonstruos');
+    const cabecera = tablaMonstruos.querySelector('thead tr');
+
+    while(cabecera.cells.length > 0)
+    {
+        cabecera.deleteCell(0);
+    }
+   
+    columnasSeleccionadas.forEach
+    (
+        function(columna)
+        {
+            const celda = cabecera.insertCell();
+            celda.textContent = columna;  
+        }
+    )
 }
 
 function calcularPromedio(monstruosGuardados)
@@ -112,14 +191,45 @@ function calcularPromedio(monstruosGuardados)
     
     const promedioXP = parseInt(sumaXP)/parseInt(valoresXP.length);
     
-    console.log(promedioXP);
     return promedioXP;
 }
 
+let idMonstruoEnviado;
 
-async function renderizarTablaConMonstruos()
+function cargarDatosEnFormulario(monstruo)
 {
-    let monstruosGuardados = await axiosModulo.getMonstruos();
+    document.getElementById("spinner").style.display = "flex";
+    setTimeout
+    (
+        function()
+        {
+            idMonstruoEnviado = monstruo.id;
+            console.log("Id monstruo enviado:",idMonstruoEnviado)
+            document.getElementById('nombre').value = monstruo.nombre;
+            document.getElementById('tipo').value = monstruo.tipo;
+            document.getElementById('alias').value = monstruo.alias;
+            
+            const radioInput = monstruo.alineamiento ? document.querySelector(`input[name="alineamiento"][value="${monstruo.alineamiento}"]`) : null;
+
+            if(radioInput)
+            {
+                radioInput.checked = true;                
+            }
+            
+
+            document.getElementById('xp').value = monstruo.xp;
+            document.getElementById("spinner").style.display = "none";
+        }, "1000"
+    );
+}
+
+
+let monstruosGuardados;
+
+async function renderizarTablaConMonstruos(columnasSeleccionadas)
+{
+    console.log("se llamo a renderizar tabla correctamente.")
+    monstruosGuardados = await axiosModulo.getMonstruos();
     const tablaMonstruos = document.getElementById('tablaMonstruos');
  
     const criterio = document.getElementById('filtrarTipo').value;
@@ -137,7 +247,7 @@ async function renderizarTablaConMonstruos()
             {    
                 return monstruo.tipo == criterio;
             }
-        )
+        );
     }
 
     if(monstruosGuardados !== null)
@@ -146,8 +256,7 @@ async function renderizarTablaConMonstruos()
         const promedioExperiencia = calcularPromedio(monstruosGuardados);
         document.querySelector("#promedioExperiencia").value = promedioExperiencia;
 
-        const columnasSeleccionadas = obtenerColumnasSeleccionadas();
-
+        
         monstruosGuardados.sort
         (
             function(a,b)
@@ -168,18 +277,22 @@ async function renderizarTablaConMonstruos()
                 (
                     function(columna)
                     {
+                        
                         fila.insertCell().textContent = monstruo[columna];
                     }
                 );
 
-                crearBoton("editar",fila,columnasSeleccionadas.lenght,principalModulo.editarMonstruo,monstruo.id,monstruosGuardados)
                 
-                crearBoton("borrar",fila,columnasSeleccionadas.lenght,principalModulo.borrarMonstruo,monstruo.id,monstruosGuardados)
+                fila.addEventListener
+                (
+                    'click',function()
+                    {
+                        cargarDatosEnFormulario(monstruo);
+                    }
+                );
             }
-        );       
-
-        
-           
+        );      
+          
     }
     else
     {
@@ -187,19 +300,5 @@ async function renderizarTablaConMonstruos()
     }    
 }
 
-
-
-const seleccionTipo = document.getElementById('filtrarTipo');
-crearOpcionesSelect(seleccionTipo);
-seleccionTipo.addEventListener('change', renderizarTablaConMonstruos);
-
-document.querySelectorAll(".checkbox-columna").forEach
-(
-    function(checkbox)
-    {
-        checkbox.addEventListener('change', renderizarTablaConMonstruos)
-    }
-);
-
-renderizarTablaConMonstruos();
-
+actualizarCabecera(columnasSeleccionadas);
+await renderizarTablaConMonstruos(columnasSeleccionadas);

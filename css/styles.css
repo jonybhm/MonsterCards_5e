@@ -155,7 +155,7 @@ form
 }
 
 
-form img
+img
 {
     width: 45px;
     margin-left: 5px;
@@ -230,34 +230,20 @@ select
     display:inline;
 }
 
-
-
-.table.custom-table
+ 
+#tablaMonstruos thead
 {
-    background-color: rgb(106, 112, 123);
+    font-family:'DNDFont';  
+    align-items: center;       
+}
+
+#tablaMonstruos 
+{
     padding: 2px;
     width: 700px;
     margin-left: auto;
     margin-right: auto;
     margin-top: 50px;
-    
-}
-
-.table.custom-table tr
-{
-    
-    text-align: center;
-    font-family:'Arial',sans-serif;  
-    
-}
- 
-.table.custom-table thead
-{
-    font-family:'DNDFont';
-    text-decoration:dashed;
-    background-color: rgb(171,66,66);
-    font-weight: bold;
-    align-items: center;       
 }
 
 #principal
@@ -326,4 +312,5 @@ button
     cursor: url('puntero.png'),pointer;
     justify-content:center;    
     margin-inline: 10px;
+    
 }
