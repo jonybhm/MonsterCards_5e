@@ -10,10 +10,14 @@
     <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
     <script type="module" defer src="./js/axios.js"></script>
 
-    <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <!-- <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css"> -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="./css/styles.css">
 
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.min.js"></script>
 
+       
     <title>parcial 2</title>
 
 </head>
@@ -125,9 +129,9 @@
             </div>
 
     
-            <!-- <button type="submit" class="guardar"> <img src="./assets/guardar.png" alt="GUARDAR" >GUARDAR </button> -->
+            
             <button type="submit" class="btn btn-primary" id="btnPostMonstruo"><img src="./assets/guardar.png" alt="GUARDAR" >Guardar</button>
-
+            <button type="button" class="btn btn-primary" id="btnCancelMonstruo"><img src="./assets/cancelar.png" alt="CANCELAR" >Cancelar</button>
             
     
         </form>
@@ -135,25 +139,37 @@
     
     <br>
 
+   
+
 <div class="container-fuid">
     <div class="row">
         <div class="d-flex justify-content-center">
-            <div class="col-md-2">
-                <label for="tipo" class="bg-danger">Filtrar por tipo:</label>
-            </div>
-            <div class="col-md-5">
-                <select name="filtrarTipo" id="filtrarTipo" class="form-control">
-                    <option value="Todos">Todos</option>
-                </select>          
-            </div>
             
+            <div class="col-md-3">
+
+                <div class="dropdown">
+                    <button class="btn btn-danger dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                        Filtrar por:
+                     </button>
+                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1" id="filtroTipos">
+                        <li>
+                            <a class="dropdown-item" href="#tablaMonstruos">Todos</a>
+
+                        </li>
+                      </ul>
+                </div>             
+            </div>
+            <div class="col-md-4">
+                <input type="text" name="tipoDeFiltro" id="tipoDeFiltro" class="form-control" readonly >
+                         
+            </div>
         </div>
     </div>
 
     <div class="row">
         <div class="d-flex justify-content-center">
             <div class="col-md-2">
-                <label for="tipo" class="bg-danger">Promedio XP/FUERZA:</label>
+                <label for="tipo" class="bg-danger">Promedio:</label>
             </div>
             <div class="col-md-5">
                 <input type="text" name="promedioExperiencia" id="promedioExperiencia" class="form-control" readonly >

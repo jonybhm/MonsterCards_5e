@@ -77,7 +77,23 @@ formulario.addEventListener
 
             }
             principalModulo.limpiarForm();
-            await renderizarTablaConMonstruos(columnasSeleccionadas);
+
+            if(columnasSeleccionadasLocal)
+                {            
+
+                    guardarColumnasSeleccionadasLocalStorage();
+                                        
+                    actualizarCabecera(columnasSeleccionadasLocal);
+                    renderizarTablaConMonstruos(columnasSeleccionadasLocal);   
+                }
+                else
+                {
+                    
+                    guardarColumnasSeleccionadasLocalStorage();
+                                    
+                    actualizarCabecera(columnasSeleccionadas);
+                    renderizarTablaConMonstruos(columnasSeleccionadas);
+                }
 
             
                   
@@ -102,7 +118,39 @@ botonEliminar.addEventListener
         {
 
             await principalModulo.borrarMonstruo(idMonstruoEnviado,monstruosGuardados);
-            renderizarTablaConMonstruos(columnasSeleccionadas);
+            
+
+            if(columnasSeleccionadasLocal)
+                {            
+                                       
+                    actualizarCabecera(columnasSeleccionadasLocal);
+                    renderizarTablaConMonstruos(columnasSeleccionadasLocal);   
+                }
+                else
+                {                   
+                                    
+                    actualizarCabecera(columnasSeleccionadas);
+                    renderizarTablaConMonstruos(columnasSeleccionadas);
+                }
+        }
+        catch(error)
+        {
+            console.error(error.message);
+
+        }
+    }
+);
+
+const botonCancelar = document.getElementById('btnCancelMonstruo');
+    
+botonCancelar.addEventListener
+(
+    'click',async function(event)
+    {
+        event.preventDefault();
+        try
+        {
+            idMonstruoEnviado = null;
             principalModulo.limpiarForm();
         }
         catch(error)
@@ -114,15 +162,23 @@ botonEliminar.addEventListener
 );
 
 
-let checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
 
-let columnasSeleccionadas =  Array.from(checkboxes).map
-(
-    function(checkbox)
-    {
-        return checkbox.dataset.column;
-    }
-);
+let checkboxes = document.querySelectorAll('input[type="checkbox"]');
+
+function seleccionarColumnas()
+{    
+    return Array.from(checkboxes).map
+    (
+        function(checkbox)
+        {
+            return checkbox.dataset.column;
+        }
+    );
+}
+
+let columnasSeleccionadas = seleccionarColumnas();
+
+let columnasSeleccionadasLocal = JSON.parse(localStorage.getItem('columnasSeleccionadas'));
 
 checkboxes.forEach
 (
@@ -133,20 +189,42 @@ checkboxes.forEach
             'change', function () 
             {
                 checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
-                columnasSeleccionadas =  Array.from(checkboxes).map
-                (
-                    function(checkbox)
-                    {
-                        return checkbox.dataset.column;
-                    }
-                );
                 
-                actualizarCabecera(columnasSeleccionadas);
-                renderizarTablaConMonstruos(columnasSeleccionadas);
+
+                if(columnasSeleccionadasLocal)
+                {            
+
+                    guardarColumnasSeleccionadasLocalStorage();
+                                        
+                    actualizarCabecera(columnasSeleccionadasLocal);
+                    renderizarTablaConMonstruos(columnasSeleccionadasLocal);   
+                }
+                else
+                {
+                    
+                    guardarColumnasSeleccionadasLocalStorage();
+                                    
+                    actualizarCabecera(columnasSeleccionadas);
+                    renderizarTablaConMonstruos(columnasSeleccionadas);
+                }
             }
         );            
     }
 );
+
+function guardarColumnasSeleccionadasLocalStorage()
+{
+
+    columnasSeleccionadas =  seleccionarColumnas();
+
+    localStorage.setItem('columnasSeleccionadas', JSON.stringify(columnasSeleccionadas));
+
+    columnasSeleccionadasLocal = JSON.parse(localStorage.getItem('columnasSeleccionadas'));
+    
+}
+
+
+
     
 
 
@@ -180,16 +258,21 @@ function calcularPromedio(monstruosGuardados)
             return monstruo.xp;
         }
     )
+
+    let promedioXP = 0;
     
-    const sumaXP = valoresXP.reduce
-    (
-        function(anterior,actual)
-        {
-            return parseInt(anterior) + parseInt(actual);
-        }
-    )
+    if(valoresXP.length > 0)
+    {
+        const sumaXP = valoresXP.reduce
+        (
+            function(anterior,actual)
+            {
+                return parseInt(anterior) + parseInt(actual);
+            }
+        )
+        promedioXP = parseInt(sumaXP)/parseInt(valoresXP.length);
+    }
     
-    const promedioXP = parseInt(sumaXP)/parseInt(valoresXP.length);
     
     return promedioXP;
 }
@@ -224,6 +307,53 @@ function cargarDatosEnFormulario(monstruo)
 }
 
 
+//FILTRAR POR TIPO
+
+const miDropdown = document.getElementById('filtroTipos');
+
+tiposDeMonstruos.forEach
+(
+    function(tipo)
+    {
+        const opcionElement = document.createElement('li');
+        opcionElement.innerHTML = `<a class="dropdown-item" href="#tablaMonstruos">${tipo}</a>`;
+        miDropdown.appendChild(opcionElement);
+    }
+);
+
+let criterio = 'Todos';
+console.log('valor seleccionado', criterio)
+
+miDropdown.addEventListener
+(
+    'click', function(event)
+    {
+        event.preventDefault();
+        
+        if(event.target.classList.contains('dropdown-item'))
+        {
+            criterio = event.target.textContent.trim();
+            console.log('valor seleccionado', criterio)
+            
+            if(columnasSeleccionadasLocal)
+            {         
+                                
+                actualizarCabecera(columnasSeleccionadasLocal);
+                renderizarTablaConMonstruos(columnasSeleccionadasLocal);   
+            }
+            else
+            {        
+                                
+                actualizarCabecera(columnasSeleccionadas);
+                renderizarTablaConMonstruos(columnasSeleccionadas);
+            }
+        }
+    }
+);
+
+
+//RENDERIZAR TABLA
+
 let monstruosGuardados;
 
 async function renderizarTablaConMonstruos(columnasSeleccionadas)
@@ -232,24 +362,24 @@ async function renderizarTablaConMonstruos(columnasSeleccionadas)
     monstruosGuardados = await axiosModulo.getMonstruos();
     const tablaMonstruos = document.getElementById('tablaMonstruos');
  
-    const criterio = document.getElementById('filtrarTipo').value;
-    
+
     while (tablaMonstruos.rows.length > 1) 
     {
         tablaMonstruos.deleteRow(1);
     }
 
     if(criterio != "Todos")
-    {        
-        monstruosGuardados = monstruosGuardados.filter 
-        (
-            function(monstruo)
-            {    
-                return monstruo.tipo == criterio;
-            }
-        );
-    }
-
+{        
+    monstruosGuardados = monstruosGuardados.filter 
+    (
+        function(monstruo)
+        {    
+            return monstruo.tipo == criterio;
+        }
+    );
+}
+document.querySelector("#tipoDeFiltro").value = criterio;
+        
     if(monstruosGuardados !== null)
     {
 
@@ -300,5 +430,17 @@ async function renderizarTablaConMonstruos(columnasSeleccionadas)
     }    
 }
 
-actualizarCabecera(columnasSeleccionadas);
-await renderizarTablaConMonstruos(columnasSeleccionadas);
+
+
+if(columnasSeleccionadasLocal)
+    {         
+                          
+        actualizarCabecera(columnasSeleccionadasLocal);
+        renderizarTablaConMonstruos(columnasSeleccionadasLocal);   
+    }
+    else
+    {        
+                        
+        actualizarCabecera(columnasSeleccionadas);
+        renderizarTablaConMonstruos(columnasSeleccionadas);
+    }
