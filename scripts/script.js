@@ -152,6 +152,8 @@ botonCancelar.addEventListener
         {
             idMonstruoEnviado = null;
             principalModulo.limpiarForm();
+            mostrarOcultarBotonCancelar();
+
         }
         catch(error)
         {
@@ -161,6 +163,17 @@ botonCancelar.addEventListener
     }
 );
 
+function mostrarOcultarBotonCancelar()
+{
+    if(idMonstruoEnviado != null)
+    {
+        botonCancelar.style.visibility = 'visible';
+    }
+    else
+    {
+        botonCancelar.style.visibility = 'hidden';
+    }
+}
 
 
 let checkboxes = document.querySelectorAll('input[type="checkbox"]');
@@ -251,7 +264,7 @@ function actualizarCabecera(columnasSeleccionadas)
 
 function calcularPromedio(monstruosGuardados)
 {
-    const valoresXP = monstruosGuardados.map
+    let valoresXP = monstruosGuardados.map
     (
         function(monstruo)
         {
@@ -263,7 +276,7 @@ function calcularPromedio(monstruosGuardados)
     
     if(valoresXP.length > 0)
     {
-        const sumaXP = valoresXP.reduce
+        let sumaXP = valoresXP.reduce
         (
             function(anterior,actual)
             {
@@ -277,7 +290,68 @@ function calcularPromedio(monstruosGuardados)
     return promedioXP;
 }
 
-let idMonstruoEnviado;
+function calcularMinimoOMaximo(monstruosGuardados,tipoCalculo)
+{
+    let valoresXP = monstruosGuardados
+    .map
+    (
+        function(monstruo)
+        {
+            return monstruo.xp;
+        }
+    )
+    .filter 
+    (
+        function(valor)
+        {
+            return !isNaN(valor);
+        }
+    )
+
+    if(valoresXP.length > 0)
+    {
+        if(tipoCalculo)
+        {                       
+            return valoresXP
+            .reduce
+            (
+                
+                function(min,actual)
+                {
+                    return Math.min(min,actual);
+                }
+            )
+        }
+        else
+        {
+            return valoresXP
+            .reduce
+            (
+                
+                function(max,actual)
+                {
+                    return Math.max(max,actual);
+                }
+            )
+        }
+    }
+    else
+    {
+        return "no hay minimo";
+    }
+}
+
+
+
+
+
+
+
+
+
+let idMonstruoEnviado = null;
+
+
 
 function cargarDatosEnFormulario(monstruo)
 {
@@ -302,6 +376,8 @@ function cargarDatosEnFormulario(monstruo)
 
             document.getElementById('xp').value = monstruo.xp;
             document.getElementById("spinner").style.display = "none";
+            mostrarOcultarBotonCancelar();
+
         }, "1000"
     );
 }
@@ -336,14 +412,13 @@ miDropdown.addEventListener
             console.log('valor seleccionado', criterio)
             
             if(columnasSeleccionadasLocal)
-            {         
-                                
+            {                                         
                 actualizarCabecera(columnasSeleccionadasLocal);
                 renderizarTablaConMonstruos(columnasSeleccionadasLocal);   
+                
             }
             else
-            {        
-                                
+            {                                        
                 actualizarCabecera(columnasSeleccionadas);
                 renderizarTablaConMonstruos(columnasSeleccionadas);
             }
@@ -359,6 +434,7 @@ let monstruosGuardados;
 async function renderizarTablaConMonstruos(columnasSeleccionadas)
 {
     console.log("se llamo a renderizar tabla correctamente.")
+    mostrarOcultarBotonCancelar();
     monstruosGuardados = await axiosModulo.getMonstruos();
     const tablaMonstruos = document.getElementById('tablaMonstruos');
  
@@ -380,6 +456,10 @@ async function renderizarTablaConMonstruos(columnasSeleccionadas)
 }
 document.querySelector("#tipoDeFiltro").value = criterio;
         
+document.querySelector("#minimoValor").value = calcularMinimoOMaximo(monstruosGuardados,true);
+
+document.querySelector("#maximoValor").value = calcularMinimoOMaximo(monstruosGuardados,false);
+
     if(monstruosGuardados !== null)
     {
 

@@ -159,7 +159,7 @@
                       </ul>
                 </div>             
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <input type="text" name="tipoDeFiltro" id="tipoDeFiltro" class="form-control" readonly >
                          
             </div>
@@ -171,7 +171,7 @@
             <div class="col-md-2">
                 <label for="tipo" class="bg-danger">Promedio:</label>
             </div>
-            <div class="col-md-5">
+            <div class="col-md-4">
                 <input type="text" name="promedioExperiencia" id="promedioExperiencia" class="form-control" readonly >
                          
             </div>
@@ -179,7 +179,24 @@
         </div>
     </div>
 
-    
+    <div class="row">
+        <div class="d-flex justify-content-center">
+            <div class="col-md-1">
+                <label for="tipo" class="bg-danger">Mínimo:</label>
+            </div>
+            <div class="col-md-2">
+                <input type="text" name="minimoValor" id="minimoValor" class="form-control" readonly >
+                         
+            </div>
+            <div class="col-md-1">
+                <label for="tipo" class="bg-danger">Máximo:</label>
+            </div>
+            <div class="col-md-2">
+                <input type="text" name="maximoValor" id="maximoValor" class="form-control" readonly >
+                         
+            </div>
+        </div>
+    </div>
 
     <div class="row">
         <div class="d-flex justify-content-center">
@@ -213,6 +230,8 @@
             </div>
         </div>
     </div>
+
+    
 </div>
 
 <button type="button" class="btn btn-primary" id="btnDelMonstruo"><img src="./assets/destruir.png" alt="ELIMINAR" class="btnEliminar">Eliminar</button>
