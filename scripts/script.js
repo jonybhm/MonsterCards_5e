@@ -441,20 +441,20 @@ async function renderizarTablaConMonstruos(columnasSeleccionadas)
     }
 
     if(criterio != "Todos")
-{        
-    monstruosGuardados = monstruosGuardados.filter 
-    (
-        function(monstruo)
-        {    
-            return monstruo.tipo == criterio;
-        }
-    );
-}
-document.querySelector("#tipoDeFiltro").value = criterio;
-        
-document.querySelector("#minimoValor").value = calcularMinimoOMaximo(monstruosGuardados,true);
+    {        
+        monstruosGuardados = monstruosGuardados.filter 
+        (
+            function(monstruo)
+            {    
+                return monstruo.tipo == criterio;
+            }
+        );
+    }
+    document.querySelector("#tipoDeFiltro").value = criterio;
+            
+    document.querySelector("#minimoValor").value = calcularMinimoOMaximo(monstruosGuardados,true);
 
-document.querySelector("#maximoValor").value = calcularMinimoOMaximo(monstruosGuardados,false);
+    document.querySelector("#maximoValor").value = calcularMinimoOMaximo(monstruosGuardados,false);
 
     if(monstruosGuardados !== null)
     {
