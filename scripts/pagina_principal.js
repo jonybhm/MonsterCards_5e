@@ -18,17 +18,14 @@ function crearElemento(tag,contenido,icono = {})
 
 export function limpiarForm()
 {
-    document.getElementById("spinner").style.display = "flex";
-    setTimeout
-    (
-        function()
-        {            
-            document.getElementById('nombre').value = '';
-            document.getElementById('tipo').value = '';
-            document.getElementById('alias').value = '';
-            document.getElementById("spinner").style.display = "none";
-        }, "1000"
-    );
+    console.log("limpiando el form");
+              
+    document.getElementById('nombre').value = '';
+    document.getElementById('tipo').value = '';
+    document.getElementById('alias').value = '';
+    document.getElementById("spinner").style.display = "none";
+        
+   
 }
 
 

@@ -1,0 +1,36 @@
+{
+  "monstruos": [
+    {
+      "id": 265705,
+      "nombre": "rezmir",
+      "tipo": "Bruja",
+      "alias": "semidragon",
+      "alineamiento": "NM",
+      "xp": "7936"
+    },
+    {
+      "id": 988160,
+      "nombre": "la bruja",
+      "tipo": "Bruja",
+      "alias": "de oz",
+      "alineamiento": "LN",
+      "xp": "3692"
+    },
+    {
+      "id": 934151,
+      "nombre": "acererak",
+      "tipo": "Esqueleto",
+      "alias": "el eterno",
+      "alineamiento": "CM",
+      "xp": "5727"
+    },
+    {
+      "id": 715650,
+      "nombre": "Dragon",
+      "tipo": "Fantasma",
+      "alias": "Ancestral",
+      "alineamiento": "LN",
+      "xp": "8924"
+    }
+  ]
+}

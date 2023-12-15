@@ -61,10 +61,10 @@ formulario.addEventListener
             if(idMonstruo != null)
             {
                 const updatedMonstruo = new monstruoModulo.Monstruo (idMonstruo,nombre,tipo,alias,alineamiento,xp);
-
+                console.log("Antes updMonstruo");
                 await axiosModulo.updMonstruo(updatedMonstruo)     
+                console.log("Despues updMonstruo");
                 idMonstruoEnviado = null;
-
             }
             else
             {
@@ -73,30 +73,25 @@ formulario.addEventListener
                 await axiosModulo.postMonstruo(nuevoMonstruo)
                 console.log("Despues postMonstruo");    
                 monstruosGuardados = await axiosModulo.getMonstruos();
-
-
+                
             }
-            principalModulo.limpiarForm();
 
             if(columnasSeleccionadasLocal)
                 {            
-
                     guardarColumnasSeleccionadasLocalStorage();
-                                        
+                                       
                     actualizarCabecera(columnasSeleccionadasLocal);
                     renderizarTablaConMonstruos(columnasSeleccionadasLocal);   
                 }
                 else
-                {
-                    
+                {                   
                     guardarColumnasSeleccionadasLocalStorage();
                                     
                     actualizarCabecera(columnasSeleccionadas);
                     renderizarTablaConMonstruos(columnasSeleccionadas);
-                }
-
-            
+                }               
                   
+                principalModulo.limpiarForm();
         }
         catch(error)
         {
@@ -118,7 +113,8 @@ botonEliminar.addEventListener
         {
 
             await principalModulo.borrarMonstruo(idMonstruoEnviado,monstruosGuardados);
-            
+            idMonstruoEnviado = null;
+            principalModulo.limpiarForm();
 
             if(columnasSeleccionadasLocal)
                 {            
